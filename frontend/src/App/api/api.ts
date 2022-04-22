@@ -13,10 +13,10 @@ const sleep = (delay : number) => {
     })
 }
 
-// axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = 'http://localhost:5000/api';
 
 axios.interceptors.request.use(config=>{
-    const token = store.commonStore["user-token"];
+    const token = store.commonStore.token;
     if(token){
         config.headers.Authorization = `Bearer ${token}`;
         console.log("configuration is",config.headers.Authorization);
@@ -36,7 +36,7 @@ axios.interceptors.response.use(async response=>{
                     toast.error(data);
                 }
                 if(config.method==='get' && data.errors.hasOwnProperty('id')){
-                    history.push('http://localhost:5000/api/not-found');
+                    history.push('/not-found');
                 }
                 if(data.errors){
                     const modalStateErrors = [];
@@ -52,11 +52,11 @@ axios.interceptors.response.use(async response=>{
                 toast.error("unauthorized");
                 break;
             case 404:
-                history.push("http://localhost:5000/api/not-found");
+                history.push("/not-found");
                 break;
             case 500:
                 store.commonStore.setServerError(data);
-                history.push('http://localhost:5000/api/server-error');
+                history.push('/server-error');
                 break;
         }
         return Promise.reject(error);
@@ -72,17 +72,17 @@ const requests = {
 }
 
 const Activities = {
-    list: () => requests.get<Activity[]>('http://localhost:5000/api/activities'),
-    details:(id:string) => requests.get<Activity>(`http://localhost:5000/api/activities/${id}`),
-    create:(activity:Activity) => axios.post<void>(`http://localhost:5000/api/activities`,activity),
-    update:(activity:Activity) => axios.put<void>(`http://localhost:5000/api/activities/${activity.id}`,activity),
-    delete:(id:string) => axios.delete<void>(`http://localhost:5000/api/activities/${id}`)
+    list: () => requests.get<Activity[]>('/activities'),
+    details:(id:string) => requests.get<Activity>(`/activities/${id}`),
+    create:(activity:Activity) => axios.post<void>(`/activities`,activity),
+    update:(activity:Activity) => axios.put<void>(`/activities/${activity.id}`,activity),
+    delete:(id:string) => axios.delete<void>(`/activities/${id}`)
 }
 
 const Account = {
     current: () => requests.get<User>('/account'),
-    login: (user:UserFormValues) => requests.post<User>('https://intenseshow.backendless.app/api/users/login',user),
-    register:(user:UserFormValues) => requests.post<User>('https://intenseshow.backendless.app/api/users/register',user)
+    login: (user:UserFormValues) => requests.post<User>('/users/login',user),
+    register:(user:UserFormValues) => requests.post<User>('/users/register',user)
 }
 
 const api = {

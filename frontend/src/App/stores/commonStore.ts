@@ -3,7 +3,7 @@ import { ServerError } from "../Models/serverError";
 
 export default class CommonStore{
     error: ServerError | null = null;
-    "user-token":string | null = window.localStorage.getItem('ownerId');
+    token:string | null = window.localStorage.getItem('jwt');
     appLoaded = false;
 
 
@@ -11,12 +11,12 @@ export default class CommonStore{
         makeAutoObservable(this);
 
         reaction(
-            ()=>this["user-token"],
+            ()=>this.token,
             token=>{
                 if(token){
-                    window.localStorage.setItem("user-token",token)
+                    window.localStorage.setItem("jwt",token)
                 }else{
-                    window.localStorage.removeItem("user-token")
+                    window.localStorage.removeItem("jwt")
                 }
             }
         )
@@ -28,7 +28,7 @@ export default class CommonStore{
 
     setToken = (token: string | null) => {
          
-        this["user-token"] = token;
+        this.token = token;
 
     }
 

@@ -22,7 +22,7 @@ export default class UserStore{
             const user = await api.Account.login(creds);
             console.log("user is",user);
             
-            store.commonStore.setToken(user["user-token"]);
+            store.commonStore.setToken(user.token);
             
             // window.localStorage.setItem('ownerId',user.ownerId)
             // console.log("token is",store.commonStore.setToken(user.token))
@@ -37,7 +37,7 @@ export default class UserStore{
     register = async (creds: UserFormValues) => {
         try {
             await api.Account.register(creds);
-            history.push(`/account/registerSuccess?email=${creds.email}`);
+            history.push(`/activities`);
             store.modalStore.closeModal();
         } catch (error) {
             throw error;
@@ -46,7 +46,7 @@ export default class UserStore{
 
     logout = () => {
         store.commonStore.setToken(null);
-        window.localStorage.removeItem('user-token');
+        window.localStorage.removeItem('jwt');
         this.user = null;
         history.push("/");
     }
