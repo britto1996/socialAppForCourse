@@ -93,6 +93,8 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
+            Console.WriteLine("result success or not" + result.Succeeded);
+
             if (!result.Succeeded) return BadRequest("Problem registering user");
 
             var origin = Request.Headers["origin"];
